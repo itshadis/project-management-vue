@@ -9,20 +9,15 @@ import cameraIcon from '@/assets/icons/camera-icon.svg'
 import logOutIcon from '@/assets/icons/logout-icon.svg'
 import bagIcon from '@/assets/icons/bag-icon.svg'
 import logo from '@/assets/main-logo.svg'
+import { ref } from 'vue'
 
-const props = defineProps({
-  isOpen: {
-    type: Boolean,
-    required: true,
-  },
-})
+const isOpenSideBar = ref(true)
 
-const LISTMENUS = [
-  {
-    label: 'MAIN MENUS',
-    icon: null,
-    link: null,
-  },
+function toogleSidebar() {
+  isOpenSideBar.value = !isOpenSideBar.value
+}
+
+const LIST_MAIN_MENUS = [
   {
     label: 'Overview',
     icon: overviewIcon,
@@ -48,11 +43,9 @@ const LISTMENUS = [
     icon: cameraIcon,
     link: '/online-meeting',
   },
-  {
-    label: 'OTHER MENUS',
-    icon: null,
-    link: null,
-  },
+]
+
+const LIST_OTHER_MENUS = [
   {
     label: 'Settings',
     icon: settingIcon,
@@ -68,36 +61,74 @@ const LISTMENUS = [
 
 <template>
   <aside
-    class="relative min-h-screen overflow-y-scroll transform transition-all duration-300 bg-[#FAFAFA]"
-    :class="props.isOpen ? 'w-[260px]' : 'w-0'"
+    class="relative min-h-screen overflow-y-scroll transform transition-all duration-500 bg-[#FAFAFA]"
+    :class="isOpenSideBar ? 'w-[260px]' : 'w-[90px]'"
   >
-    <div class="p-6 text-lg font-medium flex items-center justify-between text-nowrap">
+    <div class="relative p-6 text-lg font-medium flex items-center justify-between text-nowrap">
       <div class="flex items-center gap-2">
-        <img :src="logo" alt="Logo" />
-        <h2>DesignHub</h2>
+        <img :src="logo" alt="Logo" class="w-[40px] shrink-0" />
+        <h2 :class="isOpenSideBar ? 'block' : 'hidden'">DesignHub</h2>
       </div>
-      <img :src="doubleArrow" alt="Logo" />
+      <button
+        @click="toogleSidebar"
+        class="cursor-pointer absolute transition-all duration-500 ease-in"
+        :class="isOpenSideBar ? 'right-4' : 'rotate-180 right-0'"
+      >
+        <img
+          alt="Logo"
+          class="transition-all duration-300 ease-in"
+          :src="doubleArrow"
+          :class="isOpenSideBar ? 'w-6' : 'w-5'"
+        />
+      </button>
     </div>
 
     <nav class="px-5 text-primary">
       <ul class="flex flex-col gap-1">
-        <li v-for="LISTMENU in LISTMENUS" :key="LISTMENU" class="py-3">
-          <template v-if="LISTMENU.label">
-            <RouterLink :to="LISTMENU.link">
-              <div class="flex justify-between">
-                <div class="flex gap-4">
-                  <img :src="LISTMENU.icon" />
-                  {{ LISTMENU.label }}
-                </div>
-                <span></span>
+        <p
+          class="py-2 transition-all duration-500 ease-in text-nowrap"
+          :class="isOpenSideBar ? 'block' : 'hidden'"
+        >
+          MAIN MENUS
+        </p>
+        <li v-for="menu in LIST_MAIN_MENUS" :key="menu" class="py-3">
+          <RouterLink :to="menu.link">
+            <div class="flex" :class="isOpenSideBar ? 'justify-between' : 'justify-center'">
+              <div class="flex gap-4">
+                <img :src="menu.icon" />
+                <p
+                  class="transition-all duration-500 ease-in text-nowrap"
+                  :class="isOpenSideBar ? 'block' : 'hidden'"
+                >
+                  {{ menu.label }}
+                </p>
               </div>
-            </RouterLink>
-          </template>
-          <template v-else>
-            <p class="flex gap-4 font-medium">
-              {{ LISTMENU.label }}
-            </p>
-          </template>
+              <span></span>
+            </div>
+          </RouterLink>
+        </li>
+
+        <p
+          class="mt-2 py-4 border-t-2 border-[#ececec] transition-all duration-500 ease-in text-nowrap"
+          :class="isOpenSideBar ? 'block' : 'hidden'"
+        >
+          OTHER MENUS
+        </p>
+        <li v-for="menu in LIST_OTHER_MENUS" :key="menu" class="py-3">
+          <RouterLink :to="menu.link">
+            <div class="flex" :class="isOpenSideBar ? 'justify-between' : 'justify-center'">
+              <div class="flex gap-4">
+                <img :src="menu.icon" />
+                <p
+                  class="transition-all duration-500 ease-in text-nowrap"
+                  :class="isOpenSideBar ? 'block' : 'hidden'"
+                >
+                  {{ menu.label }}
+                </p>
+              </div>
+              <span></span>
+            </div>
+          </RouterLink>
         </li>
       </ul>
     </nav>
