@@ -20,3 +20,11 @@ body {
 .text-primary {
   color: #737373;
 }
+
+.bg-primary {
+  background-color: #737373;
+}
+
+.border-primary {
+  border-color: #E9ECF1;
+}
